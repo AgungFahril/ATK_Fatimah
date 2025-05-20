@@ -22,7 +22,7 @@ public class FormTambahBarang extends javax.swing.JDialog {
     public FormTambahBarang(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         text_barcode.setEnabled(false);
 
         cb_supplier_static = cb_supplier;
@@ -158,20 +158,20 @@ public class FormTambahBarang extends javax.swing.JDialog {
     }
 
     private void updateBarcodeOtomatis() {
-    String nama = text_namabarang.getText().trim();
-    String kategori = cb_kategori.getSelectedItem() != null ? cb_kategori.getSelectedItem().toString() : "";
-    String satuan = cb_satuan.getSelectedItem() != null ? cb_satuan.getSelectedItem().toString() : "";
+        String nama = text_namabarang.getText().trim();
+        String kategori = cb_kategori.getSelectedItem() != null ? cb_kategori.getSelectedItem().toString() : "";
+        String satuan = cb_satuan.getSelectedItem() != null ? cb_satuan.getSelectedItem().toString() : "";
 
-    if (!nama.isEmpty() && !kategori.isEmpty() && !satuan.isEmpty()) {
-        String prefix = nama.substring(0, Math.min(3, nama.length())).toUpperCase();
-        String kat = kategori.substring(0, Math.min(2, kategori.length())).toUpperCase();
-        String sat = satuan.substring(0, Math.min(2, satuan.length())).toUpperCase();
+        if (!nama.isEmpty() && !kategori.isEmpty() && !satuan.isEmpty()) {
+            String prefix = nama.substring(0, Math.min(3, nama.length())).toUpperCase();
+            String kat = kategori.substring(0, Math.min(2, kategori.length())).toUpperCase();
+            String sat = satuan.substring(0, Math.min(2, satuan.length())).toUpperCase();
 
-        String timeStamp = new java.text.SimpleDateFormat("yyMMddHHmmss").format(new java.util.Date());
-        String barcode = prefix + kat + sat + timeStamp;
-        text_barcode.setText(barcode);
+            String timeStamp = new java.text.SimpleDateFormat("yyMMddHHmmss").format(new java.util.Date());
+            String barcode = prefix + kat + sat + timeStamp;
+            text_barcode.setText(barcode);
+        }
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -451,64 +451,64 @@ public class FormTambahBarang extends javax.swing.JDialog {
 
     private void btn_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_simpanActionPerformed
 
-         String namaBarang = text_namabarang.getText().trim();
-    String kategori = cb_kategori.getSelectedItem() != null ? cb_kategori.getSelectedItem().toString() : "";
-    String satuan = cb_satuan.getSelectedItem() != null ? cb_satuan.getSelectedItem().toString() : "";
-    String harga = text_harga.getText().trim();
-    String stok = text_stok.getText().trim();
+        String namaBarang = text_namabarang.getText().trim();
+        String kategori = cb_kategori.getSelectedItem() != null ? cb_kategori.getSelectedItem().toString() : "";
+        String satuan = cb_satuan.getSelectedItem() != null ? cb_satuan.getSelectedItem().toString() : "";
+        String harga = text_harga.getText().trim();
+        String stok = text_stok.getText().trim();
 
-    // Validasi input
-    if (namaBarang.isEmpty() || kategori.isEmpty() || satuan.isEmpty() || harga.isEmpty() || stok.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Semua field harus diisi!");
-        return;
-    }
-
-    // Generate barcode otomatis
-    String prefix = namaBarang.substring(0, Math.min(3, namaBarang.length())).toUpperCase();
-    String kat = kategori.substring(0, Math.min(2, kategori.length())).toUpperCase();
-    String sat = satuan.substring(0, Math.min(2, satuan.length())).toUpperCase();
-    String timeStamp = new java.text.SimpleDateFormat("yyMMddHHmmss").format(new java.util.Date());
-    String barcode = prefix + kat + sat + timeStamp;
-    text_barcode.setText(barcode);
-
-    // Ambil ID supplier
-    ItemSupplier selectedSupplier = (ItemSupplier) cb_supplier.getSelectedItem();
-    int supplierId = selectedSupplier != null ? selectedSupplier.getId() : -1;
-
-    if (supplierId == -1) {
-        JOptionPane.showMessageDialog(this, "Supplier belum dipilih.");
-        return;
-    }
-
-    try {
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost/atk", "root", "");
-
-        String sql = "INSERT INTO barang (barcode, Nama_barang, Kategori, Satuan, Harga, Stok, Id_Supplier) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setString(1, barcode);
-        ps.setString(2, namaBarang);
-        ps.setString(3, kategori);
-        ps.setString(4, satuan);
-        ps.setString(5, harga);
-        ps.setString(6, stok);
-        ps.setInt(7, supplierId);
-
-        ps.executeUpdate();
-        JOptionPane.showMessageDialog(this, "Data berhasil disimpan!");
-
-        // Refresh tabel barang jika form induknya FormInventori
-        if (getParent() instanceof FormInventori) {
-            ((FormInventori) getParent()).tampilkanBarang();
+        // Validasi input
+        if (namaBarang.isEmpty() || kategori.isEmpty() || satuan.isEmpty() || harga.isEmpty() || stok.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Semua field harus diisi!");
+            return;
         }
 
-        dispose(); // tutup form
-        ps.close();
-        con.close();
+        // Generate barcode otomatis
+        String prefix = namaBarang.substring(0, Math.min(3, namaBarang.length())).toUpperCase();
+        String kat = kategori.substring(0, Math.min(2, kategori.length())).toUpperCase();
+        String sat = satuan.substring(0, Math.min(2, satuan.length())).toUpperCase();
+        String timeStamp = new java.text.SimpleDateFormat("yyMMddHHmmss").format(new java.util.Date());
+        String barcode = prefix + kat + sat + timeStamp;
+        text_barcode.setText(barcode);
 
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Gagal menyimpan data: " + e.getMessage());
-    }
+        // Ambil ID supplier
+        ItemSupplier selectedSupplier = (ItemSupplier) cb_supplier.getSelectedItem();
+        int supplierId = selectedSupplier != null ? selectedSupplier.getId() : -1;
+
+        if (supplierId == -1) {
+            JOptionPane.showMessageDialog(this, "Supplier belum dipilih.");
+            return;
+        }
+
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/atk", "root", "");
+
+            String sql = "INSERT INTO barang (barcode, Nama_barang, Kategori, Satuan, Harga, Stok, Id_Supplier) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, barcode);
+            ps.setString(2, namaBarang);
+            ps.setString(3, kategori);
+            ps.setString(4, satuan);
+            ps.setString(5, harga);
+            ps.setString(6, stok);
+            ps.setInt(7, supplierId);
+
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Data berhasil disimpan!");
+
+            // Refresh tabel barang jika form induknya FormInventori
+            if (getParent() instanceof FormInventori) {
+                ((FormInventori) getParent()).tampilkanBarang();
+            }
+
+            dispose(); // tutup form
+            ps.close();
+            con.close();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Gagal menyimpan data: " + e.getMessage());
+        }
     }//GEN-LAST:event_btn_simpanActionPerformed
 
     private void text_namabarangKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_text_namabarangKeyReleased
