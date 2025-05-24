@@ -1,82 +1,9 @@
 package view;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
-import javax.swing.BorderFactory;
-
-
 public class FormLaporanPenjualan extends javax.swing.JPanel {
 
-    
     public FormLaporanPenjualan() {
         initComponents();
-        
-        // Style tombol
-        btn_tambah.setText("TAMBAH");
-        btn_tambah.setBackground(new java.awt.Color(70, 130, 180)); // warna biru steel blue
-        btn_tambah.setForeground(Color.WHITE);
-        btn_tambah.setFont(new java.awt.Font("Serif", Font.BOLD, 12));
-        btn_tambah.setFocusPainted(false);
-        btn_tambah.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
-        btn_tambah.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // Hover effect
-        btn_tambah.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn_tambah.setBackground(new java.awt.Color(100, 149, 237)); // Cornflower Blue
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn_tambah.setBackground(new java.awt.Color(70, 130, 180));
-            }
-        });
-        
-        // Style tombol
-        btn_edit.setText("EDIT");
-        btn_edit.setBackground(new java.awt.Color(70, 130, 180)); // warna biru steel blue
-        btn_edit.setForeground(Color.WHITE);
-        btn_edit.setFont(new java.awt.Font("Serif", Font.BOLD, 12));
-        btn_edit.setFocusPainted(false);
-        btn_edit.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
-        btn_edit.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // Hover effect
-        btn_edit.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn_edit.setBackground(new java.awt.Color(100, 149, 237)); // Cornflower Blue
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn_edit.setBackground(new java.awt.Color(70, 130, 180));
-            }
-        });
-        
-        // Style tombol
-        btn_hapus.setText("HAPUS");
-        btn_hapus.setBackground(new java.awt.Color(70, 130, 180)); // warna biru steel blue
-        btn_hapus.setForeground(Color.WHITE);
-        btn_hapus.setFont(new java.awt.Font("Serif", Font.BOLD, 12));
-        btn_hapus.setFocusPainted(false);
-        btn_hapus.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
-        btn_hapus.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // Hover effect
-        btn_hapus.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn_hapus.setBackground(new java.awt.Color(100, 149, 237)); // Cornflower Blue
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn_hapus.setBackground(new java.awt.Color(70, 130, 180));
-            }
-        });
     }
 
     /**
@@ -90,7 +17,6 @@ public class FormLaporanPenjualan extends javax.swing.JPanel {
 
         jPanel1 = new main.gradasiwarna();
         jLabel1 = new javax.swing.JLabel();
-        btn_tambah = new javax.swing.JButton();
         btn_edit = new javax.swing.JButton();
         btn_hapus = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -106,13 +32,6 @@ public class FormLaporanPenjualan extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Data Laporan Penjualan");
-
-        btn_tambah.setText("tambah");
-        btn_tambah.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_tambahActionPerformed(evt);
-            }
-        });
 
         btn_edit.setText("update");
         btn_edit.addActionListener(new java.awt.event.ActionListener() {
@@ -157,10 +76,8 @@ public class FormLaporanPenjualan extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 743, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btn_tambah, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(btn_hapus, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -183,7 +100,6 @@ public class FormLaporanPenjualan extends javax.swing.JPanel {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_tambah)
                     .addComponent(btn_edit)
                     .addComponent(btn_hapus))
                 .addGap(18, 18, 18)
@@ -193,10 +109,6 @@ public class FormLaporanPenjualan extends javax.swing.JPanel {
 
         add(jPanel1, "card2");
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btn_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_tambahActionPerformed
-        
-    }//GEN-LAST:event_btn_tambahActionPerformed
 
     private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
         // TODO add your handling code here:
@@ -210,7 +122,6 @@ public class FormLaporanPenjualan extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_edit;
     private javax.swing.JButton btn_hapus;
-    private javax.swing.JButton btn_tambah;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;

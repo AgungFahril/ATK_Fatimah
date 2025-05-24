@@ -1,79 +1,30 @@
 package Form;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
-import main.Koneksi;
 
-public class FormTambahKaryawan extends javax.swing.JDialog {
+public class FormEditKaryawan extends javax.swing.JDialog {
 
-    public Object[] dataKaryawan;
-    private boolean dataDisimpan = false;
-
-    public boolean loadDataSupplier() {
-        return dataDisimpan;
+    /**
+     * Creates new form FormTambahBarangRusak
+     */
+    public FormEditKaryawan(java.awt.Frame parent, boolean modal) {
+        initComponents();
     }
 
-    public FormTambahKaryawan(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-
-        // Style tombol
-        btn_simpan.setText("SIMPAN");
-        btn_simpan.setBackground(new java.awt.Color(70, 130, 180)); // warna biru steel blue
-        btn_simpan.setForeground(Color.WHITE);
-        btn_simpan.setFont(new java.awt.Font("Serif", Font.BOLD, 12));
-        btn_simpan.setFocusPainted(false);
-        btn_simpan.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
-        btn_simpan.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // Hover effect
-        btn_simpan.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn_simpan.setBackground(new java.awt.Color(100, 149, 237)); // Cornflower Blue
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn_simpan.setBackground(new java.awt.Color(70, 130, 180));
-            }
-        });
-
-        // Style tombol
-        btn_batal.setText("BATAL");
-        btn_batal.setBackground(new java.awt.Color(70, 130, 180)); // warna biru steel blue
-        btn_batal.setForeground(Color.WHITE);
-        btn_batal.setFont(new java.awt.Font("Serif", Font.BOLD, 12));
-        btn_batal.setFocusPainted(false);
-        btn_batal.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
-        btn_batal.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // Hover effect
-        btn_batal.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn_batal.setBackground(new java.awt.Color(100, 149, 237)); // Cornflower Blue
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn_batal.setBackground(new java.awt.Color(70, 130, 180));
-            }
-        });
-
-        cb_role.removeAllItems();
-        cb_role.addItem("admin");
-        cb_role.addItem("kasir");
-
-        cb_jeniskelamin.removeAllItems();
-        cb_jeniskelamin.addItem("perempuan");
-        cb_jeniskelamin.addItem("laki laki");
+    public void setFormData(String rfid, String nama, String username, String password,
+            String role, String jenisKelamin, String noTelepon, String alamat) {
+        text_rfid.setText(rfid);
+        text_nama.setText(nama);
+        text_username.setText(username);
+        text_password.setText(password);
+        cb_role.setSelectedItem(role);
+        cb_jeniskelamin.setSelectedItem(jenisKelamin);
+        text_notelepon.setText(noTelepon);
+        text_alamat.setText(alamat);
     }
 
     /**
@@ -167,14 +118,14 @@ public class FormTambahKaryawan extends javax.swing.JDialog {
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Password");
 
-        btn_batal.setText("Batal");
+        btn_batal.setText("BATAL");
         btn_batal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_batalActionPerformed(evt);
             }
         });
 
-        btn_simpan.setText("Simpan");
+        btn_simpan.setText("SIMPAN");
         btn_simpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_simpanActionPerformed(evt);
@@ -324,46 +275,57 @@ public class FormTambahKaryawan extends javax.swing.JDialog {
     }//GEN-LAST:event_btn_batalActionPerformed
 
     private void btn_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_simpanActionPerformed
-        String rfid = text_rfid.getText().trim();
-        String nama = text_nama.getText().trim();
-        String username = text_username.getText().trim();
-        String password = new String(text_password.getPassword()).trim();
-        String role = (String) cb_role.getSelectedItem();
-        String jenisKelamin = (String) cb_jeniskelamin.getSelectedItem();
-        String noTelepon = text_notelepon.getText().trim();
-        String alamat = text_alamat.getText().trim();
+        // TODO add your handling code here:
+        String RFID = text_rfid.getText().trim();
+        String Nama = text_nama.getText().trim();
+        String Username = text_username.getText().trim();
+        String Password = text_password.getText().trim();
+        String Role = cb_role.getSelectedItem().toString().trim();
+        String Jenis_Kelamin = cb_jeniskelamin.getSelectedItem().toString().trim();
+        String No_Telp = text_notelepon.getText().trim();
+        String Alamat = text_alamat.getText().trim();
 
-        // Validasi sederhana
-        if (rfid.isEmpty() || nama.isEmpty() || username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Harap lengkapi data yang wajib diisi.");
-            return;
-        }
+// Kode untuk koneksi ke database
+        Connection conn = null;
+        PreparedStatement pst = null;
 
         try {
-            Connection conn = Koneksi.getConnection();
-            String sql = "INSERT INTO users (RFID, Nama, Username, Password, Role, Jenis_Kelamin, No_Telepon, Alamat) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, rfid);
-            ps.setString(2, nama);
-            ps.setString(3, username);
-            ps.setString(4, password);
-            ps.setString(5, role);
-            ps.setString(6, jenisKelamin);
-            ps.setString(7, noTelepon);
-            ps.setString(8, alamat);
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/atk", "root", "");
 
-            int result = ps.executeUpdate();
-            if (result > 0) {
-                dataKaryawan = new Object[]{rfid, nama, username, password, role, jenisKelamin, noTelepon, alamat};
-                dataDisimpan = true;
-                JOptionPane.showMessageDialog(this, "Data berhasil disimpan!");
-                this.dispose();
+            // SQL query update pengguna berdasarkan RFID (misalnya RFID sebagai primary key)
+            String sql = "UPDATE pengguna SET nama = ?, username = ?, password = ?, role = ?, jenis_kelamin = ?, no_telp = ?, alamat = ? WHERE rfid = ?";
+
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, Nama);
+            pst.setString(2, Username);
+            pst.setString(3, Password);
+            pst.setString(4, Role);
+            pst.setString(5, Jenis_Kelamin);
+            pst.setString(6, No_Telp);
+            pst.setString(7, Alamat);
+            pst.setString(8, RFID); // RFID sebagai identifier untuk update
+
+            int updatedRows = pst.executeUpdate();
+
+            if (updatedRows > 0) {
+                JOptionPane.showMessageDialog(this, "Data pengguna berhasil diperbarui!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, "Gagal menyimpan data.");
+                JOptionPane.showMessageDialog(this, "Pengguna dengan RFID tersebut tidak ditemukan!", "Gagal", JOptionPane.ERROR_MESSAGE);
             }
-            ps.close();
+
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }//GEN-LAST:event_btn_simpanActionPerformed
 
@@ -388,23 +350,21 @@ public class FormTambahKaryawan extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FormTambahKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormEditKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormTambahKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormEditKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormTambahKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormEditKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormTambahKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormEditKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FormTambahKaryawan dialog = new FormTambahKaryawan(new javax.swing.JFrame(), true);
+                FormEditKaryawan dialog = new FormEditKaryawan(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

@@ -1,5 +1,6 @@
 package view;
 
+import Form.FormEditKaryawan;
 import Form.FormTambahKaryawan;
 import java.awt.Color;
 import java.awt.Component;
@@ -10,6 +11,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import main.Koneksi;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,13 +22,11 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 
-
 public class FormKelolaKaryawan extends javax.swing.JPanel {
 
-    
     public FormKelolaKaryawan() {
         initComponents();
-        
+
         DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "RFID", "Nama", "Username", "Password", "Role", "Jenis Kelamin", "No Telepon", "Alamat"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -33,9 +34,7 @@ public class FormKelolaKaryawan extends javax.swing.JPanel {
             }
         };
         table.setModel(model);
-        
-        
-        
+
         JTableHeader header = table.getTableHeader();
         header.setDefaultRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -53,7 +52,7 @@ public class FormKelolaKaryawan extends javax.swing.JPanel {
                 return label;
             }
         });
-        
+
         table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16));
         table.getTableHeader().setOpaque(false);
         table.getTableHeader().setBackground(new Color(0, 102, 204));
@@ -66,15 +65,9 @@ public class FormKelolaKaryawan extends javax.swing.JPanel {
         table.setSelectionBackground(new Color(204, 229, 255));
         table.setSelectionForeground(Color.BLACK);
         table.setShowVerticalLines(true);
-        
-        
-        
-        
+
         loadData();
-        
-        
-        
-        
+
         // Style tombol
         btn_tambah.setText("TAMBAH");
         btn_tambah.setBackground(new java.awt.Color(70, 130, 180)); // warna biru steel blue
@@ -96,7 +89,7 @@ public class FormKelolaKaryawan extends javax.swing.JPanel {
                 btn_tambah.setBackground(new java.awt.Color(70, 130, 180));
             }
         });
-        
+
         // Style tombol
         btn_edit.setText("EDIT");
         btn_edit.setBackground(new java.awt.Color(70, 130, 180)); // warna biru steel blue
@@ -118,7 +111,7 @@ public class FormKelolaKaryawan extends javax.swing.JPanel {
                 btn_edit.setBackground(new java.awt.Color(70, 130, 180));
             }
         });
-        
+
         // Style tombol
         btn_hapus.setText("HAPUS");
         btn_hapus.setBackground(new java.awt.Color(70, 130, 180)); // warna biru steel blue
@@ -141,42 +134,39 @@ public class FormKelolaKaryawan extends javax.swing.JPanel {
             }
         });
     }
-    
+
     private void loadData() {
-    DefaultTableModel model = (DefaultTableModel) table.getModel();
-    model.setRowCount(0); // clear tabel
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0); // clear tabel
 
-    try {
-        Connection conn = Koneksi.getConnection();
-        Statement st = conn.createStatement();
-        ResultSet rs = st.executeQuery("SELECT * FROM users");
+        try {
+            Connection conn = Koneksi.getConnection();
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM users");
 
-        while (rs.next()) {
-            Object[] row = new Object[] {
-                rs.getString("Id_user"),
-                rs.getString("RFID"),
-                rs.getString("Nama"),
-                rs.getString("Username"),
-                rs.getString("Password"),
-                rs.getString("Role"),
-                rs.getString("Jenis_kelamin"),
-                rs.getString("No_Telepon"),
-                rs.getString("Alamat")
-            };
-            model.addRow(row);
+            while (rs.next()) {
+                Object[] row = new Object[]{
+                    rs.getString("Id_user"),
+                    rs.getString("RFID"),
+                    rs.getString("Nama"),
+                    rs.getString("Username"),
+                    rs.getString("Password"),
+                    rs.getString("Role"),
+                    rs.getString("Jenis_kelamin"),
+                    rs.getString("No_Telepon"),
+                    rs.getString("Alamat")
+                };
+                model.addRow(row);
+            }
+
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage());
         }
 
-        rs.close();
-        st.close();
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage());
     }
-    
-    
-}
 
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -234,6 +224,11 @@ public class FormKelolaKaryawan extends javax.swing.JPanel {
 
             }
         ));
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(table);
 
         jLabel3.setBackground(new java.awt.Color(0, 51, 255));
@@ -293,23 +288,58 @@ public class FormKelolaKaryawan extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_tambahActionPerformed
-    FormTambahKaryawan form = new FormTambahKaryawan((java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this), true);
-    form.setLocationRelativeTo(this);
-    form.setVisible(true);
+        FormTambahKaryawan form = new FormTambahKaryawan((java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this), true);
+        form.setLocationRelativeTo(this);
+        form.setVisible(true);
 
-    
-    
-     loadData(); // Refresh tabel
-    
+        loadData(); // Refresh tabel
     }//GEN-LAST:event_btn_tambahActionPerformed
 
     private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
-        // TODO add your handling code here:
+        FormEditKaryawan form = new FormEditKaryawan((java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this), true);
+        form.setLocationRelativeTo(this);
+        form.setVisible(true);
+
+        loadData(); // Refresh tabel
     }//GEN-LAST:event_btn_editActionPerformed
 
     private void btn_hapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hapusActionPerformed
         // TODO add your handling code here:
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih baris yang ingin dihapus!");
+            return;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+// Ambil ID dari kolom pertama (kolom ke-0)
+        String idSupplier = model.getValueAt(selectedRow, 0).toString();
+
+// Konfirmasi penghapusan
+        int confirm = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin menghapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                // Hapus data dari database berdasarkan ID
+                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/atk", "root", "");
+                String query = "DELETE FROM users WHERE Id_user = ?";
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setString(1, idSupplier);
+                ps.executeUpdate();
+
+                // Hapus baris dari tabel
+                model.removeRow(selectedRow);
+
+                JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Kesalahan saat menghapus data: " + e.getMessage());
+            }
+        }
     }//GEN-LAST:event_btn_hapusActionPerformed
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_tableMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
