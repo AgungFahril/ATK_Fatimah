@@ -9,7 +9,6 @@ import view.FormDashboard;
 import view.FormSupplier;
 import view.FormInventori;
 import view.FormKelolaKaryawan;
-import view.FormLaporanPenjualan;
 import view.FormPembelian;
 import view.FormPenjualan;
 import java.sql.Connection;
@@ -18,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import view.FormLaporan;
 
 public class MenuUtama extends javax.swing.JFrame {
 
@@ -847,7 +847,7 @@ public class MenuUtama extends javax.swing.JFrame {
         btn_laporan.setBackground(new Color(0, 0, 205));
 
         pn_utama.removeAll();
-        pn_utama.add(new FormLaporanPenjualan());
+        pn_utama.add(new FormLaporan());
         pn_utama.repaint();
         pn_utama.revalidate();
 
